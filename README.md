@@ -29,8 +29,4 @@ SideMoveBlock: 게임의 좌우로 움직이고 사라지지 않는 블록 이�
 
 # Game 실행 화면
 
-![image](https://user-images.githubusercontent.com/109158497/199740855-1898a0a4-6dfc-4ee4-a172-78f0dc474099.png)
-
-![image](https://user-images.githubusercontent.com/109158497/199740975-a6eaea5b-40a4-424c-bd35-d844aa22d90d.png)
-
-![image](https://user-images.githubusercontent.com/109158497/199741048-b2f51f9f-2414-4c90-85b2-51ce723c3276.png)
+![image](https://user-images.githubusercontent.com/109158497/199795984-a528f998-980d-48a9-a130-1e92ee5ba1be.png)
