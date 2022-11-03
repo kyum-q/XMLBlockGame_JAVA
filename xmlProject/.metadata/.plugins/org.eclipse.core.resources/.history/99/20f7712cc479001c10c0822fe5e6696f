@@ -1,0 +1,305 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.*;
+
+public class BlockToolsPanel extends JPanel {
+	private GameGroundPanel groundPanel = null;
+	private Block block = null;
+	private JCheckBox gone = new JCheckBox("Gone",false);
+	private JCheckBox moveSide = new JCheckBox("MoveSide",false);
+	private JCheckBox moveDown = new JCheckBox("MoveDown",false);
+	private JTabbedPane pane = new JTabbedPane();
+	private SetGone setGone = new SetGone();
+	private SetSideMove setSideMove = new SetSideMove();
+	public BlockToolsPanel(GameGroundPanel groundPanel) {
+		this.groundPanel = groundPanel;
+		
+		setLayout(null);
+		JSplitPane hPane = new JSplitPane();
+		hPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		hPane.setEnabled(false); // splitPane 위치 고정
+		hPane.setLocation(0,30);
+		hPane.setSize(300,120);
+		
+		hPane.setTopComponent(pane);
+		hPane.setBottomComponent(null);
+		add(hPane);
+		
+		gone.setSize(60,20);
+		gone.setLocation(20,5);
+		gone.addItemListener(new ItemListener() {
+	         public void itemStateChanged(ItemEvent e) {
+	        	 if(e.getStateChange()==1) {
+	        		 block.setGoneCheck(1, setGone);
+	        		 pane.add("Gone",setGone);
+	        	 }
+	        	 else {
+	        		 block.setGoneCheck(0, setGone);
+	        		 pane.remove(setGone);
+	        	 }
+	         }
+	    });
+		add(gone);
+		moveSide.setSize(90,20);
+		moveSide.setLocation(80,5);
+		moveSide.addItemListener(new ItemListener() {
+	         public void itemStateChanged(ItemEvent e) {
+	        	 if(e.getStateChange()==1) {
+	        		 block.setMoveCheck(1,setSideMove);
+	        		 pane.add("SideMove",setSideMove);
+	        	 }
+	        	 else {
+	        		 block.setMoveCheck(0,setSideMove);
+	        		 pane.remove(setSideMove);
+	        	 }
+	         }
+	    });
+		add(moveSide);
+		moveDown.setSize(90,20);
+		moveDown.setLocation(170,5);
+		moveDown.addItemListener(new ItemListener() {
+	         public void itemStateChanged(ItemEvent e) {
+	        	 if(e.getStateChange()==1)
+	        		 block.setMoveDownBlock(1);
+	        	 else
+	        		 block.setMoveDownBlock(0);
+	         }
+	    });
+		add(moveDown);
+		
+		JButton imgBtn = new JButton("Block Image");
+		imgBtn.setSize(120,20);
+		imgBtn.setLocation(20,150);
+		imgBtn.setBackground(new Color(194,211,235));
+		imgBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SelectImageDialog selectFileFrame = new SelectImageDialog(block);
+			}
+		});
+		add(imgBtn);
+		
+	    JButton addBtn = new JButton("add");
+	    addBtn.setBackground(new Color(51,96,155));
+	    addBtn.setForeground(Color.white);
+	    addBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				groundPanel.addBlock(block);
+			}
+		});
+	    addBtn.setSize(100,20);
+	    addBtn.setLocation(150,150);
+		add(addBtn);
+		
+		block = new Block();
+		block.setSize(80,80);
+		block.setLocation(0,180);
+		//block.addMouseListener(new BlockMoveMouseListener(block,groundPanel));
+		add(block);
+
+		JSlider xSlider = new JSlider(JSlider.HORIZONTAL, 0, 150, 60);
+		xSlider.setPaintLabels(false);
+		xSlider.setPaintTicks(false);
+		xSlider.setPaintTrack(true);
+		xSlider.setMajorTickSpacing(50);
+		xSlider.setMinorTickSpacing(10);  
+		xSlider.addChangeListener(new ChangeListener(){
+	    @Override
+	    	public void stateChanged(ChangeEvent e) {
+	    		JSlider source=(JSlider)e.getSource();
+	    		int val = (int) source.getValue();
+	    		block.setSize(val,block.getHeight());
+	    	}
+	    });
+		xSlider.setSize(200,20);
+		xSlider.setLocation(40,330);
+	    add(xSlider);
+	    
+	    JSlider ySlider = new JSlider(JSlider.HORIZONTAL, 0, 150, 60);
+	    ySlider.setPaintLabels(true);
+	    ySlider.setPaintTicks(true);
+	    ySlider.setPaintTrack(true);
+	    ySlider.setMajorTickSpacing(50);
+	    ySlider.setMinorTickSpacing(10);  
+	    ySlider.addChangeListener(new ChangeListener(){
+	    @Override
+	    	public void stateChanged(ChangeEvent e) {
+	    		JSlider source=(JSlider)e.getSource();
+	    		int val = (int) source.getValue();
+	    		block.setSize(block.getWidth() ,val);
+	    	}
+	    });
+	    ySlider.setSize(200,45);
+	    ySlider.setLocation(40,355);
+	    add(ySlider);
+	    
+	}
+
+	
+	class BlockMoveMouseListener extends MouseAdapter {
+		private BevelBorder border = new BevelBorder(BevelBorder.RAISED);
+		private Block block;
+		private GameGroundPanel groundPanel = null;
+		public BlockMoveMouseListener(Block block, GameGroundPanel groundPanel) {
+			this.block = block;
+			this.groundPanel = groundPanel;
+		}
+		@Override
+		public void mousePressed(MouseEvent e) { 
+			
+		}
+	}
+}
+class SetGone extends JPanel {
+	private NumberField hitCount = new NumberField(3);
+	private NumberField score = new NumberField(3);
+	public SetGone() {
+		add(new JLabel("Block HitCount"));
+		add(hitCount);
+		add(new JLabel("Block Score"));
+		add(score);
+	}
+	public String getGoneValue() {
+		return "hitCount=\""+hitCount.getNumber()+ "\" score=\""+ score.getNumber()+"\"";
+	}
+	public void finalSetBlock(Block block) {
+		block.setGoneBlock(hitCount.getNumber(), score.getNumber());
+	}
+}
+class SetSideMove extends JPanel {
+	private int moveDirection = 1;
+	private NumberField moveDelay = new NumberField(3);
+	private NumberField moveX = new NumberField(3);
+	public SetSideMove() {
+		setSize(300,200);
+		
+		add(new JLabel("Delay"));
+		add(moveDelay);
+		add(new JLabel("MoveDirection"));
+		
+		JRadioButton rd1 = new JRadioButton("→");
+		JRadioButton rd2 = new JRadioButton("←");
+	   
+        rd1.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				 if(e.getStateChange()==1)
+					 moveDirection = 1;
+			}
+        });
+        rd2.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				 if(e.getStateChange()==1)
+					 moveDirection = -1;
+			}
+        });
+        // 1번 라디오 버튼 눌러져있도록
+        rd1.setSelected(true);
+        
+        ButtonGroup groupRd = new ButtonGroup();
+
+        groupRd.add(rd1);
+        groupRd.add(rd2);
+
+        add(rd1);
+        add(rd2);
+        add(new JLabel("Increase Value"));
+		add(moveX);
+	}
+	public String getMoveValue() {
+		return "moveDelay=\""+moveDelay.getNumber()+ "\" moveDirection=\""+ moveDirection*moveX.getNumber()+"\"";
+	}
+	public void finalSetBlock(Block block) {
+		block.setMoveSideBlock(moveDelay.getNumber(), moveDirection*moveX.getNumber());
+	}
+}
+class Block extends JLabel {
+	private String type = "dontGone";
+	private String imgName = null;
+	private int w=80, h=80, x, y, score=0, hitCount=0, moveDelay=0, moveDirection=0, blockDown=-1;
+	private int goneCheck=0, moveSideCheck=0;
+	private Image img;
+	private SetSideMove setSideMove = null;
+	private SetGone setGone = null;
+	public Block() {
+	}
+	public Block blockCopy() {
+		Block copy = new Block();
+		
+		copy.setSize(this.w,this.h);
+		copy.setImg(imgName);
+		if(goneCheck==1)
+			setGone.finalSetBlock(copy);
+		if(moveSideCheck==1)
+			setSideMove.finalSetBlock(copy);
+		copy.setMoveDownBlock(blockDown);
+		
+		return copy;
+	}
+	public void setGoneBlock(int hitCount, int score) {
+		this.hitCount = hitCount;
+		this.score = score;
+		goneCheck=1;
+	}
+	public void setGoneCheck(int goneCheck, SetGone setGone) { 
+		this.goneCheck = goneCheck; 
+		if(goneCheck==1)
+			this.setGone = setGone;
+	}
+	public void setMoveSideBlock(int moveDelay, int moveDirection) {
+		this.moveDelay = moveDelay;
+		this.moveDirection = moveDirection;
+		 moveSideCheck=1;
+	}
+	public void setMoveCheck(int moveSideCheck,SetSideMove setSideMove) { 
+		this.moveSideCheck = moveSideCheck; 
+		if(moveSideCheck==1)
+			this.setSideMove = setSideMove;
+	}
+	public void setMoveDownBlock(int blockDown) {
+		this.blockDown = blockDown;
+	}
+	@Override
+	public void setSize(int w,int h) {
+		super.setSize(w, h);
+		this.w = w;
+		this.h = h;
+	}
+	@Override
+	public void setLocation(int x,int y) {
+		this.x = x;
+		this.y = y;
+		super.setLocation(this.x, this.y);	
+	}
+	public void setImg(String imgName) {
+		this.imgName = imgName;
+		ImageIcon icon = new ImageIcon(imgName);
+		img = icon.getImage();
+		if(this.getParent() != null)
+			this.getParent().repaint();
+	}
+	public String getString() {
+		if(imgName==null)
+			imgName = "";
+		String basic = "x=\""+x+"\" y=\""+y+"\" w=\""+w+"\" h=\""+h+"\" blockDown=\""+blockDown+"\" img=\""+imgName+"\"";
+		if(moveSideCheck == 0) {
+			if(goneCheck == 0)
+				return "<Obj type=\"dontGone\" "+basic+" />\r\n";
+			else
+				return "<Obj type=\"gone\" "+basic+" hitCount=\""+hitCount+"\" score=\""+score+"\" />\r\n";
+		}
+		else {
+			if(goneCheck == 0)
+				return "<Obj type=\"move\" "+basic+" moveDelay=\""+moveDelay+"\" moveDirection=\""+moveDirection+"\" />\r\n";
+			else
+				return "<Obj type=\"moveAndGone\" "+basic+" moveDelay=\""+moveDelay+"\" moveDirection=\""+moveDirection+"\" hitCount=\""+hitCount+"\" score=\""+score+"\" />\r\n";
+		}
+	}
+	public void paintComponent(Graphics g) {
+			g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	}	
+}

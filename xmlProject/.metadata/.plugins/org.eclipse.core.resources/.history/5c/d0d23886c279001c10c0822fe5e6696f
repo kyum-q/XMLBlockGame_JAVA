@@ -1,0 +1,225 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+
+
+public class XmlWritingToolsFrame extends JFrame {
+	private File file = null;
+	private BasicToolsPanel basicPanel = null;
+	private GameGroundPanel groundPanel = null;
+	private BlockToolsPanel blockToolsPanel = null;
+	private MusicToolsPanel musicToolsPanel = null;
+	private GameInitToolsPanel initToolsPanel = new GameInitToolsPanel();
+	private FileDialog fileDialog = new FileDialog(this,"save file set");
+	private InitDialog initDialog = new InitDialog(this,"select game size");
+	private JFrame frame;
+	
+	private Music music = new Music();
+	private XmlString gameBgObj = null;
+
+	private int width, height;
+	private String fileName;
+	
+	public XmlWritingToolsFrame() {
+		
+		//initDialog.setVisible(true);
+		
+		//width = initDialog.getFrameWidth();
+		//height = initDialog.getFrameHeight();
+		
+		setLocation(200,60);
+		frame = this;
+		width =500; height = 500;
+		
+		System.out.println(width+ " " +height);
+		if(width==0 || height ==0 )
+			System.exit(0);
+		
+		int frameHeight = 500;
+		if(height>frameHeight)
+			frameHeight = height;
+		
+		setSize(width+300,frameHeight);
+		
+		groundPanel = new GameGroundPanel(music);
+		basicPanel = new BasicToolsPanel(groundPanel);
+		blockToolsPanel = new BlockToolsPanel(groundPanel);
+		musicToolsPanel = new MusicToolsPanel(groundPanel);
+		gameBgObj = new XmlString("GameBg", groundPanel, 0);
+		
+		makeToolBar();
+		splitPane(width,height);
+		
+		setResizable(false); // 창크기 고정 (수정 불가)
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Frame 창 닫으면 종료시키기
+		setVisible(true);
+		groundPanel.setUserAndAttack();
+	}
+
+	private void splitPane(int width, int height) {
+		JSplitPane hPane = new JSplitPane();
+		getContentPane().add(hPane, BorderLayout.CENTER);
+		
+		hPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+		hPane.setDividerLocation(width);
+		hPane.setEnabled(false); // splitPane 위치 고정
+
+		JSplitPane pPane = new JSplitPane();
+		pPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		pPane.setDividerLocation(height);
+		pPane.setEnabled(false); // splitPane 위치 고정
+		
+		pPane.setTopComponent(groundPanel);
+		pPane.setBottomComponent(new JPanel());
+		
+		JTabbedPane pane = new JTabbedPane();
+		pane.addTab("Basic",basicPanel);
+		pane.addTab("Music",musicToolsPanel);
+		pane.addTab("Block",blockToolsPanel);
+		pane.addTab("Init",initToolsPanel);
+		hPane.setRightComponent(pane);
+		hPane.setLeftComponent(pPane);
+	}
+	private void makeToolBar() {
+		JToolBar tBar = new JToolBar();
+		JButton bgmBtn = new JButton("BGM on/off");
+		JButton saveBtn = new JButton("SAVE");
+		JButton gameBgBtn = new JButton("BackGround");
+		JButton removeBtn = new JButton("Remove");
+		
+		
+		tBar.add(saveBtn);
+		tBar.addSeparator();
+		tBar.add(bgmBtn);
+		tBar.addSeparator();
+		tBar.add(gameBgBtn);
+		tBar.addSeparator();
+		tBar.add(removeBtn);
+		getContentPane().add(tBar,BorderLayout.NORTH); // 무조건 BorderLayout이어야한다
+		
+		bgmBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { 
+				if(music.checkMusicState())
+					music.stop();
+				else
+					music.play();
+			}	
+		});
+		gameBgBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SelectImageDialog selectImageFrame = new SelectImageDialog(gameBgObj, 
+						((JButton)e.getSource()).getX()+frame.getX(),50+frame.getY());			
+			}
+		});
+		removeBtn.addActionListener(new ActionListener() {
+			//private BevelBorder border = new BevelBorder(BevelBorder.RAISED);
+			@Override
+			public void actionPerformed(ActionEvent e) { 
+				if(groundPanel.getRemoveClick()) {
+					groundPanel.setRemoveClick(false);
+					((JButton)e.getSource()).setBackground(null);
+				}
+				else {
+					groundPanel.setRemoveClick(true);
+					((JButton)e.getSource()).setBackground(Color.lightGray);
+				}
+			}	
+		});
+		saveBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { 
+				String check = checkAllObj();
+				if(check.equals(" ")) {
+					fileDialog.setVisible(true);
+					
+					fileName = fileDialog.getFileName();
+					
+					if(fileName==null)
+						return;
+					
+					writingXml();
+					JOptionPane.showMessageDialog(groundPanel,"저장되었습니다",
+							"Save",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else
+					JOptionPane.showMessageDialog(groundPanel,check+"이 제대로 작성되지 않았습니다",
+							"Dont Save",JOptionPane.ERROR_MESSAGE);
+			}	
+		});
+	}
+	private String checkAllObj() {
+		if(gameBgObj.getObj() == null)
+			return "BackGround";
+		if(basicPanel.checkBasicXml())
+			return "Basic";
+		if(musicToolsPanel.checkMusicXml())
+			return "BGM";
+		if(initToolsPanel.checkInitXml())
+			return "Init";	
+		return " ";
+	}
+	private void writingXml() {
+		file = new File(fileName);
+		try{
+            //파일 객체 생성
+            
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+            
+            if(file.isFile() && file.canWrite()){
+                //쓰기
+                bufferedWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\" ?> \r\n"
+                		+ "\r\n"
+                		+ "<BlockGame>\r\n"
+                		+ "    <Screen>\r\n"
+                		+ "        <Size w=\""+width+"\" h=\""+height+"\"/>\r\n"
+                		+ "    </Screen>\r\n");
+                bufferedWriter.close();
+            }
+        }catch (IOException e) {
+            return;
+        }
+		initToolsPanel.xmlInitWriting(file);
+		musicToolsPanel.xmlMusicWriting(file);
+		basicPanel.xmlBasicWriting(gameBgObj, file);
+		groundPanel.xmlBlockWriting(file);
+	}
+	public static void main(String [] args) {
+		new XmlWritingToolsFrame();
+	}
+}
+class NumberField extends JTextField implements KeyListener {
+	private static final long serialVersionUID = 1;
+	 
+	public NumberField() {
+		super();
+		super.setText("0");
+		super.setHorizontalAlignment(JTextField.CENTER);
+		addKeyListener(this);
+	}
+	public NumberField(int i) {
+		super(i);
+		super.setText("0");
+		super.setHorizontalAlignment(JTextField.CENTER);
+		addKeyListener(this);
+	}
+
+	public void keyPressed(KeyEvent e) {}
+
+	public void keyReleased(KeyEvent e) {}
+
+	 public void keyTyped(KeyEvent e) {
+		 char c = e.getKeyChar();
+		 
+		 if (!Character.isDigit(c)) {
+			 e.consume();
+			 return;
+		 }
+	 }
+	 public int getNumber() {
+		 return Integer.parseInt(super.getText());
+	 }
+}

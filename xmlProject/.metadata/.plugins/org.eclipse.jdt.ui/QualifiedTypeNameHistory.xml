@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.awt.FlowLayout"/>
+    <fullyQualifiedTypeName name="java.awt.event.KeyListener"/>
+    <fullyQualifiedTypeName name="java.io.FileWriter"/>
+    <fullyQualifiedTypeName name="java.io.BufferedWriter"/>
+    <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+    <fullyQualifiedTypeName name="java.awt.BorderLayout"/>
+    <fullyQualifiedTypeName name="java.nio.charset.StandardCharsets"/>
+    <fullyQualifiedTypeName name="sun.nio.cs.StandardCharsets"/>
+    <fullyQualifiedTypeName name="jdk.internal.org.jline.reader.impl.history.DefaultHistory"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
+    <fullyQualifiedTypeName name="java.io.FileFilter"/>
+    <fullyQualifiedTypeName name="java.awt.event.MouseListener"/>
+    <fullyQualifiedTypeName name="javax.swing.border.BevelBorder"/>
+    <fullyQualifiedTypeName name="GameGroundPanel"/>
+    <fullyQualifiedTypeName name="javax.swing.JPanel"/>
+    <fullyQualifiedTypeName name="java.awt.Image"/>
+    <fullyQualifiedTypeName name="java.awt.event.MouseMotionAdapter"/>
+    <fullyQualifiedTypeName name="javax.swing.event.ChangeEvent"/>
+    <fullyQualifiedTypeName name="javax.swing.event.ChangeListener"/>
+    <fullyQualifiedTypeName name="java.awt.event.ItemEvent"/>
+    <fullyQualifiedTypeName name="javax.swing.JFrame"/>
+    <fullyQualifiedTypeName name="jdk.internal.platform.Container"/>
+    <fullyQualifiedTypeName name="java.awt.Container"/>
+    <fullyQualifiedTypeName name="java.awt.Color"/>
+    <fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+    <fullyQualifiedTypeName name="java.awt.event.ItemListener"/>
+    <fullyQualifiedTypeName name="BlockToolsPanel.SetSideMove"/>
+    <fullyQualifiedTypeName name="java.awt.event.KeyAdapter"/>
+    <fullyQualifiedTypeName name="java.awt.event.KeyEvent"/>
+    <fullyQualifiedTypeName name="javax.swing.JDialog"/>
+    <fullyQualifiedTypeName name="java.awt.event.InputMethodListener"/>
+    <fullyQualifiedTypeName name="com.sun.tools.example.debug.tty.EventHandler"/>
+    <fullyQualifiedTypeName name="org.xml.sax.XMLReader"/>
+    <fullyQualifiedTypeName name="jdk.internal.org.xml.sax.XMLReader"/>
+    <fullyQualifiedTypeName name="XmlBlockGame.XMLReader"/>
+    <fullyQualifiedTypeName name="XMLWritingTool.BlockToolsPanel"/>
+    <fullyQualifiedTypeName name="XmlBlockGame.Music"/>
+    <fullyQualifiedTypeName name="javax.swing.JTabbedPane"/>
+</qualifiedTypeNameHistroy>

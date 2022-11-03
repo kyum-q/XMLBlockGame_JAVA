@@ -1,0 +1,18 @@
+package XmlBlockGame;
+import javax.swing.JLabel;
+
+/**
+ * 맞으면 사라지는 블록일 경우에 필요한 함수를 가진 interface
+ * 
+ * @author 김경미
+ */
+public interface GoneBlockInterface {
+	/**
+	 * hitCount 점검하는 함수<br>
+	 * : hitCount가 0보다 작을 시 게임 score 증가시키기
+	 * 
+	 * @return 블럭의 hitCount가 0보다 작거나 같을 시 true
+	 */
+	public boolean checkHitCount();
+
+}

@@ -1,0 +1,229 @@
+import java.awt.*;
+
+import java.awt.event.*;
+import java.io.*;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+public class BasicToolsPanel extends JPanel {
+	private GameGroundPanel groundPanel = null;
+	
+	private XmlString aimObj, attackImgObj, attackingImgObj, userImgObj;
+	
+	private NumberField ballNumber = new NumberField(3);
+	private NumberField attackDelay = new NumberField(3);
+	private NumberField ballCountDelay = new NumberField(3);
+	private NumberField userLife = new NumberField(3);
+	private NumberField winScore = new NumberField(3);
+	
+	private JSlider xSlider = new JSlider(JSlider.HORIZONTAL, 0, 150, 60);
+	private JSlider ySlider = new JSlider(JSlider.HORIZONTAL, 0, 150, 60);
+	
+	public BasicToolsPanel(GameGroundPanel groundPanel) {
+		this.groundPanel = groundPanel;
+		setLayout(new FlowLayout());
+		
+		attackImgObj = new XmlString("AttackImg", groundPanel);
+		aimObj = new XmlString("Aim",groundPanel,1);
+		attackingImgObj = new XmlString("attackImg",groundPanel);
+		userImgObj = new XmlString("UserImg", groundPanel);
+		
+		setTools();
+		
+	}
+	private void setTools() {
+
+		add(new JLabel("User Img                                                          "));
+
+		JButton attackingImgBtn = new JButton("attack User Image");
+		attackingImgBtn.addActionListener(new ImgActionListener(attackingImgObj,attackingImgBtn));
+		add(attackingImgBtn);
+		JButton userImgBtn = new JButton("User Image");
+		userImgBtn.addActionListener(new ImgActionListener(userImgObj,userImgBtn));
+		add(userImgBtn);
+		
+		xSlider.setPaintLabels(false);
+		xSlider.setPaintTicks(false);
+		xSlider.setPaintTrack(true);
+		xSlider.setMajorTickSpacing(50);
+		xSlider.setMinorTickSpacing(10);  
+		xSlider.addChangeListener(new ChangeListener(){
+	    @Override
+	    	public void stateChanged(ChangeEvent e) {
+	    		JSlider source=(JSlider)e.getSource();
+	    		int val = (int) source.getValue();
+	    		groundPanel.userSetSize(val,-1);
+	    	}
+	    });
+	    add(xSlider);
+	    
+	    ySlider.setPaintLabels(true);
+	    ySlider.setPaintTicks(true);
+	    ySlider.setPaintTrack(true);
+	    ySlider.setMajorTickSpacing(50);
+	    ySlider.setMinorTickSpacing(10);  
+	    ySlider.addChangeListener(new ChangeListener(){
+	    @Override
+	    	public void stateChanged(ChangeEvent e) {
+	    		JSlider source=(JSlider)e.getSource();
+	    		int val = (int) source.getValue();
+	    		groundPanel.userSetSize(-1,val);
+	    	}
+	    });
+	    add(ySlider);
+	    
+	    add(new JLabel("                                                                         "));
+	    add(new JLabel("Attack Img                                                        "));
+	    JButton attackImgBtn = new JButton("attack Image");
+		attackImgBtn.addActionListener(new ImgActionListener(attackImgObj,attackImgBtn));
+		add(attackImgBtn);
+		JButton aimBtn = new JButton("AimColor");
+		aimBtn.setBackground(new Color(194,211,235));
+		aimBtn.addActionListener(new ColorchooseListener(aimObj));
+		add(aimBtn);
+		add(new JLabel("                                                                         "));
+	    
+		add(new JLabel("Attack Delay"));
+		add(attackDelay);
+		add(new JLabel("Ball Delay"));
+		add(ballCountDelay);
+		add(new JLabel("Attack Number"));
+		add(ballNumber);
+		
+		add(new JLabel("                                                                              "));
+		add(new JLabel("                     "));
+		add(new JLabel("User Life"));
+		add(userLife);
+		add(new JLabel("                  "));
+		add(new JLabel("                 "));
+		add(new JLabel("Win Score"));
+		add(winScore);
+		add(new JLabel("               "));
+	}
+	
+	public boolean checkBasicXml() {
+		//aimObj, attackImgObj, attackingImgObj, userImgObj
+		if(userLife.getNumber()<1 || winScore.getNumber()<1)
+			return true;
+		if(attackImgObj.getObj() == null)
+			return true;
+		if(attackingImgObj.getObj() == null)
+			return true;
+		if(userImgObj.getObj() ==  null)
+			return true;
+		if(aimObj.getObj() ==  null)
+			return true;
+		if(ballNumber.getNumber()<1 || attackDelay.getNumber()<1)
+			return true;
+		return false;
+	}
+	public void xmlBasicWriting( XmlString gameBg, File file) {
+		try{
+			FileOutputStream fw = new FileOutputStream(file, true); // true는 원래 있던 txt 파일에 이어서쓰기 위해 존재 
+			BufferedWriter bufferedWriter =new BufferedWriter(new OutputStreamWriter(fw, "utf-8"));
+            if(file.isFile() && file.canWrite()){
+                //쓰기
+                bufferedWriter.write(
+                		  "        "+gameBg.getString() +"\r\n"
+                		+ "        <Attack count=\""+ballNumber.getNumber()+"\" delay=\""+attackDelay.getNumber()+"\" ballCountDelay=\""+ballCountDelay.getNumber()+"\" img=\""+attackImgObj.getObj()+"\"/>\r\n"
+                		+ "        "+aimObj.getString()
+                		+ "        <User w=\""+xSlider.getValue()+"\" h=\""+ySlider.getValue()+"\" life=\""+userLife.getNumber()+"\" \r\n"
+                		+ "            "+attackingImgObj.getString()+" \r\n"
+                		+ "            img=\""+userImgObj.writingObj()+"\" />\r\n"
+                		+ "        <FinalScore winScore=\""+ winScore.getNumber()+"\" />\r\n");
+                bufferedWriter.flush();
+                bufferedWriter.close();
+            }
+        }catch (IOException e) {
+            return;
+        }
+	}
+}
+class ImgActionListener implements ActionListener {
+	private XmlString xmlObj;
+	public ImgActionListener(XmlString xmlObj, JButton btn) {
+		this.xmlObj = xmlObj;
+		xmlObj.setButton(btn);
+		btn.setBackground(new Color(194,211,235));
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		SelectImageDialog selectFileFrame = new SelectImageDialog(xmlObj);
+	}			
+}
+class ColorchooseListener implements ActionListener {
+	private XmlString xmlObj;
+	private JLabel label = null;
+	public ColorchooseListener(XmlString xmlObj) {
+		this.xmlObj = xmlObj;
+	}
+	public ColorchooseListener(XmlString xmlObj, JLabel label) {
+		this.xmlObj = xmlObj;
+		this.label = label;
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Color color = JColorChooser.showDialog(null, "Color", Color.WHITE);
+		
+		if(color == null) {
+			return;
+		}
+		int r = color.getRed();
+		int g = color.getGreen();
+		int b = color.getBlue();
+		((JButton)e.getSource()).setBackground(color);
+		if(label!=null)
+			label.setForeground(color);
+		xmlObj.setObj("r=\""+r+"\" g=\""+g+"\" b=\""+b+"\"");
+	}
+}
+
+class XmlString {
+	private String obj=null, objName;
+	private int type = -1;
+	private JPanel panel = null;
+	private JButton btn = null;
+	public XmlString(String objName, JPanel groundPanel, int type) {
+		this.objName = objName;
+		this.panel = groundPanel;
+		this.type = type;
+	}
+	public XmlString(String objName, JPanel groundPanel) {
+		this.objName = objName;
+		this.panel = groundPanel;
+	}
+	public void setButton(JButton btn) {
+		this.btn = btn;
+	}
+	public String getString() {
+		String obj = this.obj;
+		if(obj==null)
+			obj="";
+		if(type == 0)
+			return "<"+objName+">"+obj+"</"+objName+">\r\n";
+		else if(type == 1)
+			return "<"+objName+" "+obj+"/>\r\n";
+		//return obj;
+		return objName+"=\""+obj+"\"";
+	}
+	public void setObj(String obj) { 
+		this.obj = obj; 
+		if(panel instanceof GameGroundPanel)
+			((GameGroundPanel) panel).setGroundPanel(this);
+		if(panel instanceof GameInitToolsPanel)
+			if(objName.equals("InitBg"))
+				((GameInitToolsPanel) panel).setBgImg(obj);
+		if(btn!=null)
+			btn.setBackground(Color.LIGHT_GRAY);
+	}
+	public String getObjName() { return objName; }
+	public String writingObj() {
+		if(obj==null)
+			return " ";
+		return obj;
+	}
+	public String getObj() { return obj; }
+	public boolean equalsObjName(String s) { return (s.equals(objName)); }
+}

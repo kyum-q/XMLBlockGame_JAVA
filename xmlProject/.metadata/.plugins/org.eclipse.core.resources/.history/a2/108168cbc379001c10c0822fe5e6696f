@@ -1,0 +1,70 @@
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class InitDialog extends JDialog {
+	private int width=0,height=0;
+	JLabel warningLabel = new JLabel("");
+	private JButton select = new JButton("결정");
+	private NumberField widthInput = new NumberField();
+	private NumberField heightInput = new NumberField();
+	public InitDialog(JFrame frame, String title) {
+		super(frame,title,true);
+		setLayout(null);
+		setSize(300,200);
+
+		JLabel sizeLabel = new JLabel("FRAME의 SIZE 입력");
+		sizeLabel.setSize(300,20);
+		sizeLabel.setLocation(0,10);
+		sizeLabel.setHorizontalAlignment(JLabel.CENTER);
+		add(sizeLabel);
+		JLabel sizeLabel2 = new JLabel("(Width X Height)");
+		sizeLabel2.setSize(300,20);
+		sizeLabel2.setLocation(0,30);
+		sizeLabel2.setHorizontalAlignment(JLabel.CENTER);
+		add(sizeLabel2);
+
+		widthInput.setSize(40,20);
+		widthInput.setLocation(100,60);
+		add(widthInput);
+		JLabel xLabel = new JLabel("X");
+		xLabel.setSize(300,20);
+		xLabel.setLocation(0,60);
+		xLabel.setHorizontalAlignment(JLabel.CENTER);
+		add(xLabel);
+		heightInput.setSize(40,20);
+		heightInput.setLocation(160,60);
+		add(heightInput);
+		
+		warningLabel.setSize(300,20);
+		warningLabel.setLocation(0,90);
+		warningLabel.setForeground(Color.RED);
+		warningLabel.setHorizontalAlignment(JLabel.CENTER);
+		add(warningLabel);
+		
+		select.setSize(100,20);
+		select.setLocation(100,110);
+		select.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { 
+				
+				if(widthInput.getNumber()<=0 || heightInput.getNumber()<=0) {
+					warningLabel.setText("입력창에 정보를 입력 해주세요");
+					return;
+				}
+				
+				width = Integer.parseInt(widthInput.getText());
+				height = Integer.parseInt(heightInput.getText());
+								
+				setVisible(false);
+			}	
+		});
+		add(select);
+		
+		setResizable(false); // 창크기 고정 (수정 불가)
+	}
+	public int getFrameWidth() { return width; }
+	public int getFrameHeight() { return height; }
+}

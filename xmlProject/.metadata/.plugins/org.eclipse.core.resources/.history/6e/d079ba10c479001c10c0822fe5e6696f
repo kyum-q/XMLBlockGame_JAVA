@@ -1,0 +1,100 @@
+import java.awt.*;
+
+import java.awt.event.*;
+import java.io.*;
+
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+
+public class SelectImageDialog extends JDialog {
+	private Music music = new Music();
+	private ImageIcon icon[] = null;
+	private XmlString xmlObj = null;
+	private Block block = null;
+	public SelectImageDialog(Block block) {
+		setLocation(420,180);
+		this.block = block;
+		setPanel();
+		setVisible(true);
+	}
+	public SelectImageDialog(XmlString xmlObj,Container container) {
+		this.xmlObj = xmlObj;
+		setPanel();
+		setLocationRelativeTo(container);
+		setVisible(true);
+	}
+	public SelectImageDialog(XmlString xmlObj) {
+		setLocation(420,180);
+		this.xmlObj = xmlObj;
+		setPanel();
+		setVisible(true);
+	}
+	public SelectImageDialog(XmlString xmlObj, int x, int y) {
+		setLocation(x,y);
+		this.xmlObj = xmlObj;
+		setPanel();
+		setVisible(true);
+	}
+	private void setPanel() {
+		setSize(300,300);
+		File dir = null;
+		FileFilter filter = null;
+		setLayout(new GridLayout(5,5));
+		dir = new File("C:\\Users\\user\\OneDrive\\바탕 화면\\동계 학습 프로젝트\\xmlProject\\image\\");
+		filter = new FileFilter() { 
+			public boolean accept(File f) { 
+				if(f.getName().endsWith("png") || f.getName().endsWith("jpg"))
+					return true;
+				return false;
+			} 
+		};
+		File files[] = dir.listFiles(filter); 
+	
+		for(int i=0;i<files.length;i++) {
+			ImageIcon icon = null;
+			ImgFileLabel label = null;
+			icon = new ImageIcon(files[i].toString());
+			label = new ImgFileLabel(icon);
+			label.addMouseListener(new SelectMouseListener(files[i].toString()));
+			add(label);
+		}
+	}
+	class SelectMouseListener extends MouseAdapter {
+		private BevelBorder border = new BevelBorder(BevelBorder.RAISED);
+		private String fileName;
+		public SelectMouseListener(String fileName) {
+			this.fileName = fileName;
+		}
+		@Override
+		public void mouseClicked(MouseEvent e) { 
+			if(xmlObj!=null)
+				xmlObj.setObj(fileName);
+			else
+				block.setImg(fileName);
+			setVisible(false);
+		}
+		public String getImageFile(String fileName) { return fileName;  }
+		@Override
+		public void mouseEntered(MouseEvent e) {//마우스가 해당 컴포넌트 영역 안에 있을 때
+			((ImgFileLabel)e.getSource()).setBorder(border);
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			((ImgFileLabel)e.getSource()).setBorder(null);
+		}
+	}
+}
+class ImgFileLabel extends JLabel {
+	Image img = null;
+	public ImgFileLabel(ImageIcon icon) {
+		img = icon.getImage();
+	}
+	public ImgFileLabel(ImageIcon icon,int x,int y) {
+		//super();
+		img = icon.getImage();
+		this.setBounds(x,y,30,30);
+	}
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	}		
+}

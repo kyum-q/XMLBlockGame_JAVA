@@ -1,0 +1,111 @@
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class GameGroundPanel extends JPanel {
+	private Image bgImg = null; 
+	private Image attackImg = null;
+	private User user = null;
+	private Attack attack = null;
+	public GameGroundPanel(File file) {
+		setLayout(null);
+	}
+	public void setUserAndAttack() {
+		user =  new User(this.getWidth()/2 - (60/2), this.getHeight()-60,60,60);
+		user.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {//마우스가 해당 컴포넌트 영역 안에 있을 때
+				((User)e.getSource()).setImg(1);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				((User)e.getSource()).setImg(0);
+			}
+		});
+		add(user);
+		attack = new Attack(user.getX()+70,user.getY()-10);
+		add(attack);
+	}
+	public void setGroundPanel(XmlString xmlObj) {
+		if(xmlObj.equalsObjName("GameBg")) {
+			setBackGroundImage(xmlObj.getObj());
+		}
+		else if(xmlObj.equalsObjName("AttackImg")) {
+			setAttackImg(xmlObj.getObj());
+		}
+		else if(xmlObj.equalsObjName("UserImg")) {
+			setUserImg(xmlObj.getObj());
+		}
+		else if(xmlObj.equalsObjName("AttackingImg")) {
+			setAttackingImg(xmlObj.getObj());
+		}
+		else if(xmlObj.equalsObjName("BackGroundSound")) {
+			
+		}
+	}
+	private void setBackGroundImage(String bgName) {
+		ImageIcon BgIcon = new ImageIcon(bgName);
+		bgImg = BgIcon.getImage();
+		repaint();
+	}
+	private void setAttackImg(String imgName) {
+		attack.setImage(imgName);
+	}
+	private void setUserImg(String imgName) {
+		user.setUserImg(imgName);
+	}
+	private void setAttackingImg(String imgName) {
+		user.setAttackingImg(imgName);
+	}
+	@Override
+	public void paintComponent(Graphics g) { //call back 함수
+		super.paintComponent(g); // 패널을 모두 지운다 -> 배경색을 칠한다
+		g.drawImage(bgImg, 0,0, this.getWidth(), this.getHeight(), null);
+	}
+}
+class User extends JLabel {
+	Image img[] = new Image[2];
+	int imgSelect = 0;
+	public User(int x, int y, int w, int h) {
+		this.setBounds(x,y,w,h);
+	}
+	public void setUserImg(String imgName) {
+		ImageIcon icon = new ImageIcon(imgName);
+		img[0] = icon.getImage();
+		getParent().repaint();
+		imgSelect = 0;
+	}
+	public void setAttackingImg(String imgName) {
+		ImageIcon icon = new ImageIcon(imgName);
+		img[1] = icon.getImage();
+		if(img[0]==null);
+			imgSelect = 1;
+		getParent().repaint();
+	}
+	public void setImg(int i) {
+		imgSelect = i;
+		repaint();
+	}
+	public void paintComponent(Graphics g) {
+		g.drawImage(img[imgSelect], 0, 0, this.getWidth(), this.getHeight(), this);
+	}		
+}
+class Attack extends JLabel {
+	Image img = null;
+	public Attack(int x, int y) {
+		this.setBounds(x,y,20,20);
+	}
+	public void setImage(String imgName) {
+		ImageIcon icon = new ImageIcon(imgName);
+		img = icon.getImage();
+		getParent().repaint();
+	}
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	}		
+}

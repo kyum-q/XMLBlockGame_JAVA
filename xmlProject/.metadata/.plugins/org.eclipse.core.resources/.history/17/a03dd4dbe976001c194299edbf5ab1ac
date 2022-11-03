@@ -1,0 +1,116 @@
+import java.awt.*;
+
+import java.awt.event.*;
+import java.io.*;
+
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+
+public class SelectFileFrame extends JFrame {
+
+	private XmlString xmlObj = null;
+	public SelectFileFrame(String filterFileName, XmlString xmlObj) {
+		
+		this.xmlObj = xmlObj;
+		setSize(300,300);
+		setLayout(null);
+		/*
+		SelectFilePanel c = new SelectFilePanel(fileDirectory, filterFileName);
+		
+		JScrollPane scroll = new JScrollPane(c);  // 스크롤패널을 선언
+		scroll.setBounds(0,0,280,280);    // 프레임에 스크롤패널의 위치를 정한다
+		
+		this.add(scroll);
+		this.add(c);
+		*/
+		setContentPane(new SelectFilePanel(filterFileName));
+		setVisible(true);
+	}
+	class SelectFilePanel extends JPanel {
+		private ImageIcon icon[] = null;
+		public SelectFilePanel(String filterFileName) {
+			setLayout(new GridLayout(5,5));
+			
+			File dir = null;
+			FileFilter filter = null;
+			if(filterFileName.equals("img")) {
+				dir = new File("C:\\Users\\user\\OneDrive\\바탕 화면\\동계 학습 프로젝트\\xmlProject\\image\\");
+				filter = new FileFilter() { 
+					public boolean accept(File f) { 
+						if(f.getName().endsWith("png") || f.getName().endsWith("jpg"))
+							return true;
+						return false;
+					} 
+				};
+			}
+			else if(filterFileName.equals("music")) {
+				dir = new File("C:\\Users\\user\\OneDrive\\바탕 화면\\동계 학습 프로젝트\\xmlProject\\music\\");
+				filter = new FileFilter() { 
+					public boolean accept(File f) { 
+						return f.getName().endsWith("wav");
+					}	 
+				};
+			}
+			File files[] = dir.listFiles(filter); 
+		
+			for(int i=0;i<files.length;i++) {
+				ImageIcon icon = null;
+				ImgFileLabel btn = null;
+				if(filterFileName.equals("music")) {
+					String fileNameList[] = files[i].toString().split("music");
+					
+					String fileName = fileNameList[fileNameList.length];
+					btn = new ImgFileLabel(fileName);
+				}
+				else {
+					icon = new ImageIcon(files[i].toString());
+					btn = new ImgFileLabel(icon);
+				}
+				btn.addMouseListener(new SelectMouseListener(files[i].toString()));
+				add(btn);
+			}
+		}
+	}
+	class SelectMouseListener extends MouseAdapter {
+		private BevelBorder border = new BevelBorder(BevelBorder.RAISED);
+		private String fileName;
+		public SelectMouseListener(String fileName) {
+			this.fileName = fileName;
+		}
+		@Override
+		public void mouseClicked(MouseEvent e) { 
+			xmlObj.setObj(fileName);
+			dispose();
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {//마우스가 해당 컴포넌트 영역 안에 있을 때
+			((ImgFileLabel)e.getSource()).setBorder(border);
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			((ImgFileLabel)e.getSource()).setBorder(null);
+		}
+	}
+}
+
+class ImgFileLabel extends JLabel {
+	Image img = null;
+	String fileString = null;
+	public ImgFileLabel(ImageIcon icon) {
+		setHorizontalAlignment(JLabel.CENTER);
+		img = icon.getImage();
+	}
+	public ImgFileLabel(String s) {
+		setHorizontalAlignment(JLabel.CENTER);
+		ImageIcon icon = new ImageIcon("C:\\Users\\user\\OneDrive\\바탕 화면\\musucIcon.jpg");
+		img = icon.getImage();
+		fileString = s;
+	}
+
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+		if(fileString != null) {
+			g.drawString(fileString, this.getWidth()/2,this.getHeight()-10);
+		}
+	}		
+}

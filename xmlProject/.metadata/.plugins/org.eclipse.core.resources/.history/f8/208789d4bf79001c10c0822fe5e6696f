@@ -1,0 +1,138 @@
+import java.awt.*;
+
+import java.awt.event.*;
+import java.io.*;
+
+import javax.swing.*;
+import javax.swing.event.*;
+public class GameInitToolsPanel extends JPanel {
+	private JTextField start = new JTextField();
+	private JTextField win = new JTextField();
+	private JTextField lose = new JTextField();
+	
+	private XmlString initBg = new XmlString("InitBg",this,0);
+	private XmlString fontColor = new XmlString("fontColor",this);
+	private JComboBox fontBox = null;
+	private JSlider xSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 30);
+	private Image bgImg = null;
+	public GameInitToolsPanel() {
+		setLayout(null);
+		JButton initBgBtn = new JButton("Init BackGround");
+		initBgBtn.setSize(150,25);
+		initBgBtn.setLocation(70,10);
+		initBgBtn.addActionListener(new ImgActionListener(initBg,initBgBtn));
+		add(initBgBtn);
+		
+		JLabel fontLabel = new JLabel("font");
+		fontLabel.setSize(300,80);
+		fontLabel.setLocation(-10,30);
+		fontLabel.setHorizontalAlignment(JLabel.CENTER);
+		add(fontLabel);
+		GraphicsEnvironment ge = null;
+        ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Font[] fonts = ge.getAllFonts();
+        String fontName[] = new String[fonts.length];
+        for (int i = 0; i < fonts.length; i++)
+        	fontName[i] = fonts[i].getFontName();
+        fontBox = new JComboBox(fontName);
+        
+        fontBox.setSize(200,20);
+        fontBox.setLocation(40,130);
+        add(fontBox);
+		JButton fontColorBtn = new JButton("font Color");
+		fontColorBtn.setBackground(new Color(194,211,235));
+		fontColorBtn.addActionListener(new ColorchooseListener(fontColor,fontLabel));
+		fontColorBtn.setSize(100,25);
+		fontColorBtn.setLocation(90,170);
+		add(fontColorBtn);
+		
+		xSlider.setPaintLabels(false);
+		xSlider.setPaintTicks(true);
+		xSlider.setPaintTrack(true);
+		xSlider.setOpaque(false);
+		xSlider.setMajorTickSpacing(50);
+		xSlider.setMinorTickSpacing(10);  
+		
+		xSlider.setSize(200,30);
+		xSlider.setLocation(40,210);
+	    add(xSlider);
+	    
+	    //GameSentence start="산타를 도와 선물을 전달하자" win="선물을 무사히 전달했어!" lose="선물이 모자라,,,"
+	    
+	    JLabel startSentence = new JLabel("Start Sentence");
+	    startSentence.setSize(200,20);
+	    startSentence.setLocation(10,250);
+	    add(startSentence);
+	    start.setSize(200,20);
+	    start.setLocation(40,270);
+	    add(start);
+	    
+	    JLabel winSentence = new JLabel("Win Sentence");
+	    winSentence.setSize(200,20);
+	    winSentence.setLocation(10,300);
+	    add(winSentence);
+	    win.setSize(200,20);
+	    win.setLocation(40,320);
+	    add(win);
+	    
+	    JLabel loseSentence = new JLabel("Lose Sentence");
+	    loseSentence.setSize(200,20);
+	    loseSentence.setLocation(10,350);
+	    add(loseSentence);
+	    lose.setSize(200,20);
+	    lose.setLocation(40,370);
+	    add(lose);
+	    
+	    fontBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fontLabel.setFont(new Font(fontBox.getSelectedItem().toString(),Font.BOLD,xSlider.getValue()));
+           }
+      });
+		xSlider.addChangeListener(new ChangeListener(){
+	    @Override
+	    	public void stateChanged(ChangeEvent e) {
+	    		fontLabel.setFont(new Font(fontBox.getSelectedItem().toString(),Font.BOLD,xSlider.getValue()));
+	    	}
+	    });
+	}
+	public void setBgImg(String bgName) {
+		ImageIcon BgIcon = new ImageIcon(bgName);
+		bgImg = BgIcon.getImage();
+		repaint();
+	}
+	public boolean checkInitXml() {
+		if(initBg.getObj()==null)
+			return true;
+		if(fontColor.getObj()==null)
+			return true;
+		if(start.getText() == null || win.getText() == null || lose.getText() == null)
+			return true;
+		return false;
+	}
+	public void xmlInitWriting(File file) {
+		try{
+			FileOutputStream fw = new FileOutputStream(file, true); // true는 원래 있던 txt 파일에 이어서쓰기 위해 존재 
+			BufferedWriter bufferedWriter =new BufferedWriter(new OutputStreamWriter(fw, "utf-8"));
+            if(file.isFile() && file.canWrite()){
+                //쓰기
+                bufferedWriter.write(
+                		  "    <InitPanel>\r\n"
+                		+ "        <Font font=\""+fontBox.getSelectedItem().toString()+"\" fontSize=\""+xSlider.getValue()+"\"  "+ fontColor.writingObj() +"  />\r\n"
+                		+ "        <GameSentence start=\""+start.getText()+"\" win=\""+win.getText()+"\" lose=\""+lose.getText()+"\" />\r\n"
+                		+ "        "+initBg.getString()
+                		+ "    </InitPanel>\r\n");
+                bufferedWriter.flush();
+                bufferedWriter.close();
+            }
+        }catch (IOException e) {
+            return;
+        }
+	}
+	@Override
+	public void paintComponent(Graphics g) {
+		if(bgImg != null)
+			g.drawImage(bgImg, 0, 0, this.getWidth(), this.getHeight(), this);
+		else
+			super.paintComponent(g);
+	}
+}

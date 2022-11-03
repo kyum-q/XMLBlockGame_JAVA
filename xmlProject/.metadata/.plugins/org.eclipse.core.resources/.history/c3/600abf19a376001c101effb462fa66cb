@@ -1,0 +1,98 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.FileFilter;
+
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+
+public class SelectFileFrame extends JFrame {
+	private int select = 0;
+	public SelectFileFrame(String fileDirectory, String filterFileName) {
+		
+		setSize(300,300);
+		setLayout(null);
+		/*
+		SelectFilePanel c = new SelectFilePanel(fileDirectory, filterFileName);
+		
+		JScrollPane scroll = new JScrollPane(c);  // 스크롤패널을 선언
+		scroll.setBounds(0,0,280,280);    // 프레임에 스크롤패널의 위치를 정한다
+		
+		this.add(scroll);
+		this.add(c);
+		*/
+		setContentPane(new SelectFilePanel(fileDirectory, filterFileName));
+		setVisible(true);
+	}
+
+}
+
+class SelectFilePanel extends JPanel {
+	private ImageIcon icon[] = null;
+	public SelectFilePanel(String fileDirectory, String filterFileName) {
+		setLayout(new GridLayout(5,5));
+		
+		File dir = new File(fileDirectory); 
+		FileFilter filter = null;
+		if(filterFileName.equals("img")) {
+			filter = new FileFilter() { 
+				public boolean accept(File f) { 
+					if(f.getName().endsWith("png") || f.getName().endsWith("jpg"))
+						return true;
+					return false;
+				} 
+			};
+		}
+		else if(filterFileName.equals("music")) {
+			filter = new FileFilter() { 
+				public boolean accept(File f) { 
+					return f.getName().endsWith("wav");
+				} 
+			};
+		}
+		File files[] = dir.listFiles(filter); 
+		
+		icon = new ImageIcon[files.length];
+		ImgFileLabel btn[] = new ImgFileLabel[files.length];
+		for(int i=0;i<files.length;i++) {
+			 icon[i] = new ImageIcon(files[i].toString());
+			Image img = icon[i].getImage();
+			btn[i] = new ImgFileLabel(icon[i]);
+			btn[i].addMouseListener(new SelectMouseListener());
+			add(btn[i]);
+		}
+	}
+}
+
+class SelectMouseListener extends MouseAdapter {
+	private BevelBorder border = new BevelBorder(BevelBorder.RAISED);
+	@Override
+	public void mouseClicked(MouseEvent e) { 
+		((ImgFileLabel)e.getSource()).getParent().repaint();
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {//마우스가 해당 컴포넌트 영역 안에 있을 때
+		((ImgFileLabel)e.getSource()).setBorder(border);
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		((ImgFileLabel)e.getSource()).setBorder(null);
+	}
+}
+
+class ImgFileLabel extends JLabel {
+	Image img = null;
+	public ImgFileLabel(ImageIcon icon) {
+		img = icon.getImage();
+	}
+
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	}		
+}

@@ -1,0 +1,33 @@
+?xml version="1.0" encoding="utf-8" ?> 
+
+<BlockGame>
+    <Screen>
+        <Size w="600" h="500"/>
+    </Screen>
+    <InitPanel>
+        <Font font="Agency FB" fontSize="30"  r="102" g="153" b="0"  />
+        <GameSentence start="" win="" lose="" />
+        <InitBg>C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\christmas4.jpg</InitBg>
+    </InitPanel>
+    <GamePanel>
+        <Sound> 
+            <BallSound hitSound="" 
+                removeSound="" 
+                dieSound="" />
+            <GameSound winEndSound="" 
+                loseEndSound="" 
+                backGroundSound="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\music\christmas-story-12075.wav" />
+        </Sound>
+        <GameBg>C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\lego3.png</GameBg>
+
+        <Attack count="10" delay="110" ballCountDelay="10" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\legoBg.png"/>
+        <Aim r="0" g="204" b="102"/>
+        <User w="60" h="60" life="10" 
+            attackImg="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\lego2.png" 
+            img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\lego3.png" />
+        <FinalScore winScore="10" />
+        <Block>
+                <Obj type="dontGone" x="10" y="10" w="80" h="80" blockDown="-1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\lego3.png" />
+        </Block>
+    </GamePanel>
+</BlockGame>

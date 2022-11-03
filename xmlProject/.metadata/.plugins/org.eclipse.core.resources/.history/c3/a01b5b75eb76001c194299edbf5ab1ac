@@ -1,0 +1,189 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+public class XmlWritingToolsPanel extends JPanel {
+	private File file = null;
+	private BufferedWriter bufferedWriter = null;
+	private GameGroundPanel groundPanel = null;
+	private Music music = null;
+	
+	private String screenString, initPanelString, 
+		gamePanelString, soundString, blockString;
+	
+	private XmlString gameBgObj, aimObj;
+	private XmlString hitSoundObj, removeSoundObj, dieSoundObj;
+	private XmlString winEndSoundObj, loseEndSoundObj, bgmObj;
+	private XmlString attackImgObj, attackingImgObj, userImgObj;
+	
+	private NumberField ballNumber = new NumberField(3);
+	private NumberField attackDelay = new NumberField(3);
+	private NumberField ballCountDelay = new NumberField(3);
+	private NumberField userLife = new NumberField(3);
+	private NumberField userWidth = new NumberField(3);
+	private NumberField userHeight = new NumberField(3);
+	
+	public XmlWritingToolsPanel(File file, GameGroundPanel groundPanel, Music music) {
+		this.file = file;
+		this.groundPanel = groundPanel;
+		this.music = music;
+		setLayout(new FlowLayout());
+		
+		setXmlString();
+		setTools();
+		
+	}
+	private void setXmlString() {
+		gameBgObj = new XmlString("GameBg", groundPanel, 0);
+		hitSoundObj = new XmlString("BallSound", groundPanel); 
+		removeSoundObj = new XmlString("BallSound", groundPanel);
+		dieSoundObj = new XmlString("BallSound", groundPanel);
+		winEndSoundObj = new XmlString("GameSound", groundPanel); 
+		loseEndSoundObj = new XmlString("GameSound", groundPanel);
+		bgmObj = new XmlString("BackGroundSound", groundPanel);
+		attackImgObj = new XmlString("AttackImg", groundPanel);
+		aimObj = new XmlString("Aim",groundPanel,1);
+		attackingImgObj = new XmlString("AttackingImg",groundPanel);
+		userImgObj = new XmlString("UserImg", groundPanel);
+	}
+	private void setTools() {
+		JButton gameBgBtn = new JButton("게임 배경 선택");
+		gameBgBtn.addActionListener(new OpenActionListener("img",gameBgObj));
+		
+		add(gameBgBtn);
+
+		add(new JLabel("                 -Ball Sound Select-                 "));
+		JButton hitSoundBtn = new JButton("Hit");
+		hitSoundBtn.addActionListener(new OpenActionListener("music",hitSoundObj));
+		add(hitSoundBtn);
+		JButton removeSoundBtn = new JButton("Remove");
+		removeSoundBtn.addActionListener(new OpenActionListener("music",removeSoundObj));
+		add(removeSoundBtn);
+		JButton dieSoundBtn = new JButton("Die");
+		dieSoundBtn.addActionListener(new OpenActionListener("music",dieSoundObj));
+		add(dieSoundBtn);
+		
+		add(new JLabel("                 -Game Sound Select-                 "));
+		JButton winEndSoundBtn = new JButton("Win");
+		winEndSoundBtn.addActionListener(new OpenActionListener("music",winEndSoundObj));
+		add(winEndSoundBtn);
+		JButton loseEndSoundBtn = new JButton("Lose");
+		loseEndSoundBtn.addActionListener(new OpenActionListener("music",loseEndSoundObj));
+		add(loseEndSoundBtn);
+		JButton backGroundSoundBtn = new JButton("BGM");
+		backGroundSoundBtn.addActionListener(new OpenActionListener("music",bgmObj));
+		add(backGroundSoundBtn);
+		
+		add(new JLabel("                            -Attack Set-                            "));
+		add(new JLabel("Number"));
+		add(ballNumber);
+		add(new JLabel("Delay"));
+		add(attackDelay);
+		add(new JLabel("ballDelay"));
+		add(ballCountDelay);
+		JButton attackImgBtn = new JButton("attack Image");
+		attackImgBtn.addActionListener(new OpenActionListener("img",attackImgObj));
+		add(attackImgBtn);
+		JButton aimBtn = new JButton("AimColor");
+		aimBtn.addActionListener(new ColorchooseListener());
+		add(aimBtn);
+		
+		add(new JLabel("                             -User Set-                             "));
+		add(new JLabel("Life"));
+		add(userLife);
+		//attacking 
+		JButton attackingImgBtn = new JButton("attack User Image");
+		attackingImgBtn.addActionListener(new OpenActionListener("img",attackingImgObj));
+		add(attackingImgBtn);
+		JButton userImgBtn = new JButton("User Image");
+		userImgBtn.addActionListener(new OpenActionListener("img",userImgObj));
+		add(userImgBtn);
+	}
+	public void fileWriting(String obj, String s) {
+		
+		try{
+			FileOutputStream fw = new FileOutputStream(file, true); // true는 원래 있던 txt 파일에 이어서쓰기 위해 존재 
+			bufferedWriter =new BufferedWriter(new OutputStreamWriter(fw, "utf-8"));
+            if(file.isFile() && file.canWrite()){
+                //쓰기
+                bufferedWriter.write("<"+obj+">"+s+"</"+obj+">\r\n");
+                bufferedWriter.flush();
+                bufferedWriter.close();
+            }
+        }catch (IOException e) {
+            return;
+        }
+        
+
+	}
+	private class OpenActionListener implements ActionListener {
+		private JFileChooser chooser;
+		private String fileFilter;
+		private XmlString XmlObj;
+		private String filePath;
+		public OpenActionListener(String fileFilter, XmlString XmlObj) {
+			chooser = new JFileChooser();
+			this.fileFilter = fileFilter;
+			this.XmlObj = XmlObj;
+		}
+		public void actionPerformed(ActionEvent e) {
+			FileNameExtensionFilter filter = null;
+			if(fileFilter.equals("img")) {
+				SelectFileFrame selectFileFrame = new SelectFileFrame("img",XmlObj);
+			}
+			else if(fileFilter.equals("music")) {
+				SelectFileFrame selectFileFrame = new SelectFileFrame("music",XmlObj);
+			}
+
+			((JButton)e.getSource()).setBackground(Color.LIGHT_GRAY);
+		}			
+	}
+	
+	private class ColorchooseListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Color color = JColorChooser.showDialog(null, "Color", Color.WHITE);
+			
+			if(color == null) {
+				return;
+			}
+			int r = color.getRed();
+			int g = color.getGreen();
+			int b = color.getBlue();
+			((JButton)e.getSource()).setBackground(color);
+			aimObj.setObj("r=\""+r+"\" g=\""+g+"\" b=\""+b+"\"");
+		}
+		
+	}
+}
+class XmlString {
+	private String obj, objName;
+	private int type = -1;
+	private GameGroundPanel groundPanel = null;
+	public XmlString(String objName, GameGroundPanel groundPanel, int type) {
+		this.objName = objName;
+		this.groundPanel = groundPanel;
+		this.type = type;
+	}
+	public XmlString(String objName, GameGroundPanel groundPanel) {
+		this.objName = objName;
+		this.groundPanel = groundPanel;
+	}
+	public String getString() {
+		if(type == 0)
+			return "<"+objName+">"+obj+"</"+objName+">\r\n";
+		else if(type == 1)
+			return "<"+objName+" "+obj+"/>\r\n";
+		return obj;
+	}
+	public void setObj(String obj) { 
+		this.obj = obj; 
+		groundPanel.setGroundPanel(this);
+	}
+	public String getObjName() { return objName; }
+	public String getObj() { return obj; }
+	public boolean equalsObjName(String s) { return (s.equals(objName)); }
+}

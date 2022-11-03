@@ -1,0 +1,112 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+
+import javax.swing.*;
+
+public class XmlWritingToolsFrame extends JFrame {
+	private File file = null;
+	private BufferedWriter bufferedWriter = null;
+	private XmlWritingToolsPanel toolsPanel = null;
+	private GameGroundPanel groundPanel = null;
+	private Music music = new Music();
+	public XmlWritingToolsFrame(int width,int height, String fileName) {
+		int frameWidth = 300, frameHeight = 500;
+		if(width>=frameWidth)
+			frameWidth = width+300;
+		if(height>frameHeight)
+			frameHeight = height;
+		
+		setSize(frameWidth,frameHeight);
+		
+		fileMake(width,height,fileName);
+		makeMenu();
+		splitPane(width,height);
+		
+		setResizable(false); // 창크기 고정 (수정 불가)
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Frame 창 닫으면 종료시키기
+		setVisible(true);
+		groundPanel.setUserAndAttack();
+	}
+	public void fileMake(int width,int height, String fileName) {
+		try{
+            //파일 객체 생성
+            file = new File(fileName);
+            bufferedWriter = new BufferedWriter(new FileWriter(file));
+            
+            if(file.isFile() && file.canWrite()){
+                //쓰기
+                bufferedWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\" ?> \r\n"
+                		+ "\r\n"
+                		+ "<BlockGame>\r\n"
+                		+ "    <Screen>\r\n"
+                		+ "        <Size w=\""+width+"\" h=\""+height+"\"/>\r\n"
+                		+ "    </Screen>\r\n");
+                bufferedWriter.close();
+            }
+        }catch (IOException e) {
+            return;
+        }
+		groundPanel = new GameGroundPanel(file);
+		toolsPanel = new XmlWritingToolsPanel(file, groundPanel, music);
+	}
+	private void splitPane(int width, int height) {
+		JSplitPane hPane = new JSplitPane();
+		getContentPane().add(hPane, BorderLayout.CENTER);
+		
+		hPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+		hPane.setDividerLocation(width);
+		hPane.setEnabled(false); // splitPane 위치 고정
+
+		JSplitPane pPane = new JSplitPane();
+		pPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		pPane.setDividerLocation(height);
+		pPane.setEnabled(false); // splitPane 위치 고정
+		
+		pPane.setTopComponent(groundPanel);
+		pPane.setBottomComponent(new JPanel());
+		
+		hPane.setRightComponent(toolsPanel);
+		hPane.setLeftComponent(pPane);
+	}
+	private void makeMenu() {
+		JMenuBar mBar = new JMenuBar();
+		setJMenuBar(mBar);
+		
+		JMenu fileMenu = new JMenu("File");
+		JMenuItem open = new JMenuItem("Open");
+		fileMenu.add(open);
+		
+		JMenu musicMenu = new JMenu("Music");
+		JMenuItem musicStart = new JMenuItem("Play");
+		JMenuItem musicStop = new JMenuItem("Stop");
+		JMenuItem VolUp = new JMenuItem("VolUp");
+		JMenuItem VolDown = new JMenuItem("VolDown");
+		musicMenu.add(musicStart);
+		musicMenu.add(musicStop);
+		musicMenu.add(VolUp);
+		musicMenu.add(VolDown);
+		
+		musicStart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { music.play(); }	
+		});
+		musicStop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { music.stop(); }	
+		});
+		VolUp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { music.volumeUp(); }	
+		});
+		VolDown.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) { music.volumeDown(); }	
+		});
+		
+		mBar.add(fileMenu);
+		mBar.add(musicMenu);
+	}
+}

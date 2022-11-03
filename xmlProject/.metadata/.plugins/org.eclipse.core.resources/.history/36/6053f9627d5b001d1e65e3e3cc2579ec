@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<BlockGame>
+    <Screen>
+        <Size w="274" h="357"/>
+    </Screen>
+    <InitPanel>
+        <Font font="타이포_쌍문동 B" fontSize="30"  r="255" g="255" b="255"  />
+        <GameSentence start="산타를 도와 선물을 전달하자" win="선물을 무사히 전달했어!" lose="선물이 모자라,,," />
+        <InitBg>src/image/christmas4.jpg</InitBg>
+    </InitPanel>
+    <GamePanel>
+        <Sound> 
+            <BallSound hitSound="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\music\MP_Tiny Button Push.wav" 
+                removeSound="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\music\MP_맑은 벨 알림음.wav" 
+                dieSound="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\music\MP_Water Droplet.wav" />
+            <GameSound winEndSound="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\music\MP_맑은 미션 성공(jingle).wav" 
+                loseEndSound="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\music\MP_어 이게 아닌데.wav" 
+                backGroundSound="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\music\christmas-story-12075.wav" />
+        </Sound>
+        <GameBg>src/image/christmas4.jpg</GameBg>
+
+        <Attack count="1" delay="10" ballCountDelay="150" img="src/image/snow.png"/>
+        <Aim r="255" g="255" b="255"/>
+        <User w="60" h="60" life="3" 
+            attackImg="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\santa.png" 
+            img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\santa2.png" />
+        <FinalScore winScore="200" />
+        <Block>
+                <Obj type="gone" x="10" y="10" w="50" h="40" blockDown="-1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-1.png" hitCount="1" score="10" />
+                <Obj type="gone" x="70" y="10" w="50" h="40" blockDown="1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-2.png" hitCount="1" score="10" />
+                <Obj type="gone" x="130" y="10" w="50" h="40" blockDown="-1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-1.png" hitCount="2" score="15" />
+                <Obj type="gone" x="10" y="50" w="50" h="40" blockDown="1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-3.png" hitCount="2" score="15" />
+                <Obj type="gone" x="70" y="50" w="50" h="40" blockDown="1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-4.png" hitCount="3" score="20" />
+                <Obj type="gone" x="130" y="50" w="50" h="40" blockDown="-1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-3.png" hitCount="3" score="20" />
+                <Obj type="gone" x="10" y="130" w="50" h="40" blockDown="-1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-5.png" hitCount="3" score="20" />
+                <Obj type="gone" x="70" y="130" w="50" h="40" blockDown="1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-5.png" hitCount="3" score="20" />
+                <Obj type="gone" x="130" y="130" w="50" h="40" blockDown="1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-5.png" hitCount="3" score="20" />
+                <Obj type="gone" x="70" y="210" w="50" h="40" blockDown="-1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-3.png" hitCount="3" score="20" />
+                <Obj type="gone" x="130" y="210" w="50" h="40" blockDown="-1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-5.png" hitCount="3" score="20" />
+                <Obj type="moveAndGone" x="180" y="210" w="50" h="40" blockDown="1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-2.png" moveDelay="100" moveDirection="10" hitCount="3" score="20" />
+                <Obj type="moveAndGone" x="0" y="90" w="70" h="40" blockDown="1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-1.png" moveDelay="300" moveDirection="5" hitCount="2" score="20" />
+                <Obj type="move" x="0" y="170" w="50" h="40" blockDown="-1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\stick.png" moveDelay="100" moveDirection="5" />
+                <Obj type="moveAndGone" x="80" y="170" w="70" h="40" blockDown="1" img="C:\Users\user\OneDrive\바탕 화면\동계 학습 프로젝트\xmlProject\image\present2-4.png" moveDelay="50" moveDirection="5" hitCount="2" score="20" />
+        </Block>
+    </GamePanel>
+</BlockGame>

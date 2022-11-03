@@ -1,0 +1,7 @@
+import javax.swing.JLabel;
+
+public interface GoneBlockInterface {
+	BlockGameFrame gameFrame = null;
+	public boolean checkHitCount();
+	public boolean blockAttack(JLabel attack);
+}
