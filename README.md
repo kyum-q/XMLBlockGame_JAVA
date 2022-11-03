@@ -17,7 +17,7 @@ Music: 음악을 재생하는 class
 SideMoveAndGoneBlock: 게임의 좌우로 움직이고 사라지는 블록 이미지 레이블(extends SideMoveBlock implements GoneBlockInterface)
 SideMoveBlock: 게임의 좌우로 움직이고 사라지지 않는 블록 이미지 레이블(extends DontGoneBlock)
 
-#Block의 계층 구조
+# Block의 계층 구조
 
 <h4>BlockGame Block 계층구조 그림 표현</h4>
 
@@ -27,7 +27,7 @@ SideMoveBlock: 게임의 좌우로 움직이고 사라지지 않는 블록 이�
 
 ![image](https://user-images.githubusercontent.com/109158497/199739702-47c8878b-4b42-4fc7-98ef-ebaed33a62fc.png)
 
-#Game 실행 화면
+# Game 실행 화면
 
 ![image](https://user-images.githubusercontent.com/109158497/199740855-1898a0a4-6dfc-4ee4-a172-78f0dc474099.png)
 
