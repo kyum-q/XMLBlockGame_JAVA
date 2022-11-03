@@ -1,7 +1,7 @@
 # XMLBlockShootingGame
 XML을 통해 만들어지는 BlockShootingGame 게임
 
-#Package XmlBlockGame
+# Package XmlBlockGame
 <h4>Interface Summary</h4>
 GoneBlockInterface: 맞으면 사라지는 블록일 경우에 필요한 함수를 가진 interface
 
