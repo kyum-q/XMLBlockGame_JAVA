@@ -1,6 +1,12 @@
 # XMLBlockShootingGame
 XML을 통해 만들어지는 BlockShootingGame 게임
 
+# Game 실행 화면
+
+<h4>게임 실행 전 초기화면 | 게임 실행 전 초기화면 | Shooting 화면</h4>
+
+![image](https://user-images.githubusercontent.com/109158497/199795984-a528f998-980d-48a9-a130-1e92ee5ba1be.png)
+
 # Package XmlBlockGame
 <h4>Interface Summary</h4>
 GoneBlockInterface: 맞으면 사라지는 블록일 경우에 필요한 함수를 가진 interface
@@ -28,8 +34,3 @@ GoneBlockInterface: 맞으면 사라지는 블록일 경우에 필요한 함수�
 
 ![image](https://user-images.githubusercontent.com/109158497/199739702-47c8878b-4b42-4fc7-98ef-ebaed33a62fc.png)
 
-# Game 실행 화면
-
-<h4>게임 실행 전 초기화면 | 게임 실행 전 초기화면 | Shooting 화면</h4>
-
-![image](https://user-images.githubusercontent.com/109158497/199795984-a528f998-980d-48a9-a130-1e92ee5ba1be.png)
