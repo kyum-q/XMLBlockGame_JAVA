@@ -14,16 +14,16 @@ GoneBlockInterface: 맞으면 사라지는 블록일 경우에 필요한 함수�
 
 ### Class Summary
 
-**AttackThread**: attack의 움직임을 나타내는 Thread
-**BlockGameFrame**: Block 게임의 Frame을 설정하는 class
-**DontGoneBlock**: 게임의 움직이지 않고 사라지지 않은 블록 이미지 레이블(extends JLabel)
-**GameInitPanel**: Block 게임의 타이틀 혹은 게임 종료 후 Panel
-**GamePanel**: Block 게임 실행 Panel
-**GameThread**: game을 움직이는 Thread
-**GoneBlock**: 게임의 움직이지 않지만 사라지는 블록 이미지 레이블 (extends DontGoneBlock implements GoneBlockInterface)
-**Music**: 음악을 재생하는 class
-**SideMoveAndGoneBlock**: 게임의 좌우로 움직이고 사라지는 블록 이미지 레이블(extends SideMoveBlock implements GoneBlockInterface)
-**SideMoveBlock**: 게임의 좌우로 움직이고 사라지지 않는 블록 이미지 레이블(extends DontGoneBlock)
+**AttackThread**: attack의 움직임을 나타내는 Thread<br><br>
+**BlockGameFrame**: Block 게임의 Frame을 설정하는 class<br><br>
+**DontGoneBlock**: 게임의 움직이지 않고 사라지지 않은 블록 이미지 레이블(extends JLabel)<br><br>
+**GameInitPanel**: Block 게임의 타이틀 혹은 게임 종료 후 Panel<br><br>
+**GamePanel**: Block 게임 실행 Panel<br><br>
+**GameThread**: game을 움직이는 Thread<br><br>
+**GoneBlock**: 게임의 움직이지 않지만 사라지는 블록 이미지 레이블 (extends DontGoneBlock implements GoneBlockInterface)<br><br>
+**Music**: 음악을 재생하는 class<br><br>
+**SideMoveAndGoneBlock**: 게임의 좌우로 움직이고 사라지는 블록 이미지 레이블(extends SideMoveBlock implements GoneBlockInterface)<br><br>
+**SideMoveBlock**: 게임의 좌우로 움직이고 사라지지 않는 블록 이미지 레이블(extends DontGoneBlock)<br><br>
 
 ## Block의 계층 구조
 
