@@ -12,7 +12,7 @@ XML을 통해 만들어지는 Block Shooting Game 게임 (JAVA 버전)
 <br>
 <br>
 블록은 다양한 테마로 변경할 수 있어요
-<br>
+<br> 
 
 ## 🖥&nbsp; 실행 화면
 
